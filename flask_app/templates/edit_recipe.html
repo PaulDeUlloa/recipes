@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <title>Recipe Share</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row pt-5">
+            <div class="col">
+                {# flash message AREA START#}
+                {% with messages = get_flashed_messages(with_categories=True) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            {% if category == 'register' %}
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">{{message}}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>                            
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                {# flash message AREA END#}
+                <div class="card shadow mb-3">
+                    <div class="card-body">
+                        <div class="card-header text-end">
+                            <a href="/recipes" class="btn btn-info">Return to Recipes</a>
+                            <a href="/logout" class="btn btn-danger">Log Out</a>
+                        </div>
+                        <h1>Edit Recipe!</h1>
+                    </div>
+                </div>
+                <div class="card shadow">
+                    <div class="card-body">
+                        <form action="/recipes/{{ recipe.id }}/update" method="post">
+                            <input type="hidden" name="recipe_id" value="{{ recipe.id }}"> 
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name:</label>
+                                <input type="text" name="name" id="name" class="form-control" value="{{ recipe.name }}" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description:</label>
+                                <textarea name="description" class="form-control" cols="20" rows="3" >{{ recipe.description }}</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="instructions" class="form-label">Instructions:</label>
+                                <textarea name="instructions"  class="form-control" cols="20" rows="3">{{ recipe.instructions }}</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cooked_at" class="form-label">Cooked_at:</label>
+                                <input type="date" name="cooked_at" id="cooked_at" class="form-control" value="{{ recipe.cooked_at|format_date}}">
+                            </div>
+                            <div class="mb-3">
+                                <p>Under 30 Minutes?</p>
+                                <input type="radio" name="is_under_30" value= "1" id="is_under_30" {{ "checked" if recipe.is_under_30 else "" }}>
+                                <label for="is_under_30">Yes</label>
+                                <input type="radio" name="is_under_30" value="0" id="is_under_30" {{ "checked" if not recipe.is_under_30 else "" }}>
+                                <label for="is_under_30">No</label>
+                            </div>
+                            <div style="text-align: end;">
+                                <button type="submit" class="btn btn-primary">Edit Recipe</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+</body>
+</html>

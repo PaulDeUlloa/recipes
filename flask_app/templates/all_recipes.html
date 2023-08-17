@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <title>Recipe Share</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row pt-5">
+            <div class="col">
+                {# flash message AREA START#}
+                {% with messages = get_flashed_messages(with_categories=True) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            {% if category == 'login' %}
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">{{message}}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>                            
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                {# flash message AREA END#}
+                <div class="card shadow mb-3">
+                    <div class="card-body">
+                        <h1>Welcome, <span style="color:rgb(33, 205, 125);">{{ user.first_name }}</span>!</h1>
+                    </div>
+                    <div class="card-footer text-end">
+                        <a href="/recipes/new" class="btn btn-success">+ Create</a>
+                            <a href="/logout" class="btn btn-danger">Log Out</a>
+                    </div>
+                    <div>
+                        <h2 style="margin: 5px; padding-left: 10px;">All posted recipes:</h2>
+                    </div>
+                </div>
+
+                <table class="table text-center table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name:</th>
+                            <th>Under:</th>
+                            <th>Posted By:</th>
+                            <th>Actions:</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for recipe in recipes %}
+                            <tr>
+                                <td>{{ recipe.name }}</td>           
+                                <td>{% if recipe.is_under_30 == 1 %} Yes {% else %} No {% endif %}</td>   
+                                <td>{{ recipe.user.first_name }}</td>
+                                <td>
+                                    <a href="/recipes/{{ recipe.id }}">view recipe</a> |
+                                    {% if session.user_id == recipe.user_id %}
+                                    <a href="/recipes/{{ recipe.id }}/edit">edit</a> |
+                                    <form action="/recipes/{{ recipe.id }}/delete " method="post">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+</body>
+</html>
