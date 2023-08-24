@@ -44,6 +44,7 @@
                             <th>Under:</th>
                             <th>Posted By:</th>
                             <th>Actions:</th>
+                            <th>Like Area:</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -53,13 +54,24 @@
                                 <td>{% if recipe.is_under_30 == 1 %} Yes {% else %} No {% endif %}</td>   
                                 <td>{{ recipe.user.first_name }}</td>
                                 <td>
-                                    <a href="/recipes/{{ recipe.id }}">view recipe</a> |
-                                    {% if session.user_id == recipe.user_id %}
-                                    <a href="/recipes/{{ recipe.id }}/edit">edit</a> |
-                                    <form action="/recipes/{{ recipe.id }}/delete " method="post">
-                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                    </form>
-                                    {% endif %}
+                                    <div class="card-footer d-flex gap-2 justify-content-center">
+                                        <a href="/recipes/{{ recipe.id }}">view recipe</a> |
+                                        {% if session.user_id == recipe.user_id %}
+                                        <a href="/recipes/{{ recipe.id }}/edit">edit</a> |
+                                        <form action="/recipes/{{ recipe.id }}/delete " method="post">
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="card-footer d-flex gap-2 justify-content-center">
+                                        <form action="/likes/create" method="post">
+                                            <input type="hidden" name="user_id" value="{{ session.user_id}}" />
+                                            <input type="hidden" name="recipe_id" value="{{ recipe.id }}" />
+                                            <button type="submit" class="btn btn-success {{ 'disabled' if recipe.is_liked_at_by(session.user_id) else '' }}">Like</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         {% endfor %}

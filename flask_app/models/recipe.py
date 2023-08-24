@@ -1,5 +1,6 @@
 from flask import flash
 from flask_app.models.user import User
+from flask_app.models.like import Like
 from flask_app.config.mysqlconnection import connectToMySQL
 
 
@@ -59,6 +60,18 @@ class Recipe:
 
         return is_valid
 
+    # we reference the class itself and not the object when we have @classmethod as the decorator
+    def is_liked_at_by(self, user_id):
+        """Will return true or false if user liked a recipe"""
+
+        has_liked = False
+        likes = Like.get_all_by_recipe_id(self.id)
+        # li = like, just had to rename since app would crash
+        for li in likes:
+            if li.user_id == user_id:
+                has_liked = True
+        return has_liked
+
     @classmethod
     def create(cls, form_data):
         """INSERTS a new recipe in the database."""
@@ -76,10 +89,12 @@ class Recipe:
 
         query = """
         SELECT * FROM recipes
-        JOIN users ON recipes.user_id = users.id;
+        JOIN users 
+        ON recipes.user_id = users.id;
         """
 
         results = connectToMySQL(DATABASE).query_db(query)
+
         recipes = []
 
         for result in results:
