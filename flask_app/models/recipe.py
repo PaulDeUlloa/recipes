@@ -6,8 +6,6 @@ from flask_app.config.mysqlconnection import connectToMySQL
 
 DATABASE = "users_recipes"
 
-# (*****Change Recipe***)
-
 
 class Recipe:
     def __init__(self, data):
@@ -21,7 +19,7 @@ class Recipe:
         self.updated_at = data["updated_at"]
         self.user_id = data["user_id"]
         self.user = None
-        # if you are required to display on the page who created that recipe or uploaded that recipe to the website you would switch NONE with
+        # if you're required to display who created that recipe or uploaded that recipe to the website you would switch NONE with variable name.
 
     @staticmethod
     def form_is_valid(form_data):
@@ -119,7 +117,7 @@ class Recipe:
         ON recipes.user_id = users.id
         WHERE recipes.id = %(recipe_id)s;
         """
-        # ^^^the reason why its *recipes.id* is because it has to be the name of our table.
+        # ^^^the reason why its *recipes.id* is because it has to be the same name of our table.
 
         data = {"recipe_id": recipe_id}
         results = connectToMySQL(DATABASE).query_db(query, data)

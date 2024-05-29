@@ -5,8 +5,6 @@ from flask_app.config.mysqlconnection import connectToMySQL
 
 DATABASE = "users_recipes"
 
-# (*****Change Like***)
-
 
 class Like:
     def __init__(self, data):

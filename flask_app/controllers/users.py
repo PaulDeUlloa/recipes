@@ -30,7 +30,7 @@ def register_user():
         return redirect("/")
     print("Users not found, okay to register.")
 
-    # hash the user's password (enctypt)
+    # hash the user's password (encrypt)
     hashed_pw = bcrypt.generate_password_hash(request.form["password"])
     data = {
         "first_name": request.form["first_name"],
