@@ -9,3 +9,6 @@ import flask_app.controllers.likes
 
 if __name__ == "__main__":
     app.run(debug=True, host="localhost", port=8019)
+
+
+# port number was changed to avoid running server on the same port, normallt default is 8000.
