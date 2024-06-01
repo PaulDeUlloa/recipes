@@ -5,6 +5,8 @@ from flask_app.config.mysqlconnection import connectToMySQL
 
 DATABASE = "users_recipes"
 
+# TODO: would like to add an animation to the like button when a user clicks on it.
+
 
 class Like:
     def __init__(self, data):
