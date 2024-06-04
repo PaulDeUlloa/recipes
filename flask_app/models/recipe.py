@@ -6,6 +6,8 @@ from flask_app.config.mysqlconnection import connectToMySQL
 
 DATABASE = "users_recipes"
 
+# would like to keep the recipe class at 10 items.
+
 
 class Recipe:
     def __init__(self, data):
