@@ -1,11 +1,12 @@
 from flask import flash
 from flask_app.models.user import User
+from flask_app.models.like import Like
 from flask_app.config.mysqlconnection import connectToMySQL
 
 
 DATABASE = "users_recipes"
 
-# (*****Change Recipe***)
+# would like to keep the recipe class at 10 items.
 
 
 class Recipe:
@@ -20,7 +21,7 @@ class Recipe:
         self.updated_at = data["updated_at"]
         self.user_id = data["user_id"]
         self.user = None
-        # if you are required to display on the page who created that recipe or uploaded that recipe to the website you would switch NONE with
+        # if you're required to display who created that recipe or uploaded that recipe to the website you would switch NONE with variable name.
 
     @staticmethod
     def form_is_valid(form_data):
@@ -59,6 +60,18 @@ class Recipe:
 
         return is_valid
 
+    # we reference the class itself and not the object when we have @classmethod as the decorator
+    def is_liked_at_by(self, user_id):
+        """Will return true or false if user liked a recipe"""
+
+        has_liked = False
+        likes = Like.get_all_by_recipe_id(self.id)
+        # li = like, just had to rename since app would crash
+        for li in likes:
+            if li.user_id == user_id:
+                has_liked = True
+        return has_liked
+
     @classmethod
     def create(cls, form_data):
         """INSERTS a new recipe in the database."""
@@ -76,10 +89,12 @@ class Recipe:
 
         query = """
         SELECT * FROM recipes
-        JOIN users ON recipes.user_id = users.id;
+        JOIN users 
+        ON recipes.user_id = users.id;
         """
 
         results = connectToMySQL(DATABASE).query_db(query)
+
         recipes = []
 
         for result in results:
@@ -104,7 +119,7 @@ class Recipe:
         ON recipes.user_id = users.id
         WHERE recipes.id = %(recipe_id)s;
         """
-        # ^^^the reason why its *recipes.id* is because it has to be the name of our table.
+        # ^^^the reason why its *recipes.id* is because it has to be the same name of our table.
 
         data = {"recipe_id": recipe_id}
         results = connectToMySQL(DATABASE).query_db(query, data)

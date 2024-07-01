@@ -2,6 +2,7 @@ import datetime
 from flask_app import app
 from flask import flash, redirect, render_template, request, session
 from flask_app.models.user import User
+from flask_app.models.like import Like
 from flask_app.models.recipe import Recipe
 
 
@@ -61,8 +62,9 @@ def recipe_details(recipe_id):
 
     user = User.get_by_user_id(session["user_id"])
     recipe = Recipe.get_one_with_user(recipe_id)
+    count = Like.get_like_count(recipe_id)
 
-    return render_template("recipe_details.html", user=user, recipe=recipe)
+    return render_template("recipe_details.html", user=user, recipe=recipe, count=count)
 
 
 @app.get("/recipes/<int:recipe_id>/edit")
