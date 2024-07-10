@@ -38,7 +38,7 @@ def register_user():
         "email": request.form["email"],
         "password": hashed_pw,
     }
-    # save the user to the database
+    # saves the user to the database
     user_id = User.create(data)
     # put the user's id into session
     session["user_id"] = user_id
@@ -56,9 +56,9 @@ def login():
     # validate FORM first
     if not User.login_is_valid(request.form):
         return redirect("/")
-    # check if user exists by email
+    # check's if user exists by email
     potential_user = User.get_by_email(request.form["email"])
-    # if they dont exist, flash please register and redirect
+    # if they dont exist, flash message please register and redirect
     if not potential_user:
         flash("Invalid credentials.", "login")
         return redirect("/")
@@ -73,7 +73,7 @@ def login():
     # put the user's id into session
     session["user_id"] = user.id
 
-    # redirect to the recipes
+    # redirect to the recipes page
     flash("Thank you for logging in.", "login")
     return redirect("/recipes")
 
